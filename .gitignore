@@ -29,3 +29,5 @@ glow.apk
 *.cert
 compose-scripts.md
 uploads
+
+package-lock.json

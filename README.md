@@ -1,4 +1,4 @@
-# Zzznake
+# 🐍🐍🐍 Zzznake 🐍🐍🐍
 
 A snake implementation with vanilla JavaScript
 
