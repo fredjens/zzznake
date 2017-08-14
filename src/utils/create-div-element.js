@@ -3,14 +3,14 @@
  */
 
 export const createDivElement = (name, styles, target) => {
-  eval[name] = document.createElement('div');
-  eval[name].id = name;
-  Object.assign(eval[name].style, styles);
+  window[name] = document.createElement('div');
+  window[name].id = name;
+  Object.assign(window[name].style, styles);
 
   if (target) {
     const targetDiv = document.getElementById(target);
-    targetDiv.appendChild(eval[name]);
+    targetDiv.appendChild(window[name]);
   } else {
-    document.body.appendChild(eval[name]);
+    document.body.appendChild(window[name]);
   }
 };

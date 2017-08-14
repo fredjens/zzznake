@@ -1,8 +1,9 @@
 
 import config from './config';
 import { createDivElement } from './utils/create-div-element';
+import _ from 'lodash';
 
-const { dimensions, unit } = config;
+const { dimensions, unit, snake, food } = config;
 
 /**
  * Draw the board
@@ -34,17 +35,7 @@ for (let i = 0; i < dimensions.height; i++) {
  * Draw the snake
  */
 
-let snake = {
-  direction: 'left',
-  x: 10,
-  y: 10,
-  body: 10,
-  speed: 100,
-  log: [],
-};
-
-const setSnakeColor = (color, x, y) => {
-  console.log('hoi', color, x, y);
+const setBrickColor = (color, x, y) => {
   ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
 };
 
@@ -52,7 +43,7 @@ const showSnake = () => {
   for(var i = 0; i < snake.body; i++) {
     const logEvent = snake.log[snake.log.length - (1 + i)];
 
-    setSnakeColor(
+    setBrickColor(
       'deeppink',
       (logEvent || {}).x,
       (logEvent || {}).y,
@@ -64,7 +55,7 @@ const hideSnake = () => {
   for(var i = 0; i < snake.body; i++) {
     const logEvent = snake.log[snake.log.length - (1 + snake.body + i)];
 
-    setSnakeColor(
+    setBrickColor(
       '#eee',
       (logEvent || {}).x,
       (logEvent || {}).y,
@@ -123,11 +114,6 @@ const moveSnake = (direction) => {
   });
 };
 
-setInterval(() => {
-  moveSnake(snake.direction);
-}, snake.speed);
-
-
 /**
  * Set key events
  */
@@ -150,3 +136,41 @@ document.onkeydown = function(e) {
       break;
   }
 };
+
+/**
+ * Make food
+ */
+
+const makeFood = () => {
+  const x = _.random(50);
+  const y = _.random(50);
+
+  food.x = x;
+  food.y = y;
+
+  setBrickColor('blue', x, y);
+};
+
+/**
+ * Check if snake is eating
+ */
+
+const checkIfSnakeIsEating = () => {
+  if (snake.x === food.x && snake.y === food.y) {
+    makeFood();
+    snake.body = snake.body + 1;
+    snake.speed = snake.speed - 23;
+  }
+};
+
+/**
+ * Run game
+ */
+
+setInterval(() => {
+  moveSnake(snake.direction);
+  checkIfSnakeIsEating();
+}, snake.speed);
+
+makeFood();
+
