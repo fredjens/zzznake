@@ -145,8 +145,23 @@ const makeFood = () => {
   const x = _.random(50);
   const y = _.random(50);
 
+  if (_.find(snakeBody, { x, y })) {
+    console.log('food placed under the snake...');
+
+    /**
+    * Food was placed under the snake
+    */
+    return makeFood();
+    /**
+     * So we made food again... yolo
+     */
+  }
+
   food.x = x;
   food.y = y;
+
+  const snakeLength = snake.log.length - 1;
+  const snakeBody = snake.log.slice((snakeLength - snake.body), snakeLength);
 
   setBrickColor('blue', x, y);
 };
@@ -164,10 +179,25 @@ const checkIfSnakeIsEating = () => {
 };
 
 /**
+ * Check collision
+ */
+
+const checkCollision = () => {
+  const snakeLength = snake.log.length - 2;
+  const snakeBody = snake.log.slice((snakeLength - snake.body), snakeLength);
+  const snakeHead = { x: snake.x, y: snake.y };
+
+  if (_.find(snakeBody, snakeHead)) {
+    alert('Oh noooo! Collision.... Start again?');
+  }
+}
+
+/**
  * Run game
  */
 
 setInterval(() => {
+  checkCollision();
   moveSnake(snake.direction);
   checkIfSnakeIsEating();
 }, snake.speed);
