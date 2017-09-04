@@ -1,15 +1,15 @@
 
 export default {
-  unit: 10,
+  unit: 20,
   dimensions: {
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
   },
   snake: {
     direction: 'left',
     x: 25,
     y: 25,
-    body: 3,
+    body: 2,
     speed: 100,
     log: [],
   },
