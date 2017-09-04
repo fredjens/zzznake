@@ -7,10 +7,9 @@ export const createDivElement = (name, styles, target) => {
   window[name].id = name;
   Object.assign(window[name].style, styles);
 
-  if (target) {
-    const targetDiv = document.getElementById(target);
-    targetDiv.appendChild(window[name]);
-  } else {
-    document.body.appendChild(window[name]);
+  if (!target) {
+    return document.body.appendChild(window[name]);
   }
+
+  return document.getElementById(target).appendChild(window[name]);
 };

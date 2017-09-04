@@ -1,7 +1,7 @@
-
-import config from './config';
-import { createDivElement } from './utils/create-div-element';
 import _ from 'lodash';
+import config from './config';
+
+import { createDivElement } from './utils/create-div-element';
 
 const { dimensions, unit, snake, food } = config;
 
@@ -219,87 +219,34 @@ const startGame = () => {
   }, snake.speed);
 };
 
+const drawLetter = (letter) => {
+  setBrickColor('#333', letter.toString().split('.')[0], letter.toString().split('.')[1]);
+};
+
 const startScreen = () => {
   // S
-  setBrickColor('#333', 2, 2);
-  setBrickColor('#333', 2, 3);
-  setBrickColor('#333', 2, 4);
-  setBrickColor('#333', 2, 5);
-  setBrickColor('#333', 2, 5);
-  setBrickColor('#333', 3, 2);
-  setBrickColor('#333', 4, 3);
-  setBrickColor('#333', 5, 4);
-  setBrickColor('#333', 6, 5);
-  setBrickColor('#333', 7, 5);
-  setBrickColor('#333', 7, 5);
-  setBrickColor('#333', 7, 4);
-  setBrickColor('#333', 7, 3);
-  setBrickColor('#333', 7, 2);
+  [2.2, 2.3, 2.4, 2.5, 3.2, 4.3, 5.4, 6.5, 7.5, 7.4, 7.3, 7.2]
+  .forEach(drawLetter);
+
   // N
-  setBrickColor('#333', 2, 7);
-  setBrickColor('#333', 3, 7);
-  setBrickColor('#333', 4, 7);
-  setBrickColor('#333', 5, 7);
-  setBrickColor('#333', 6, 7);
-  setBrickColor('#333', 7, 7);
-  setBrickColor('#333', 3, 8);
-  setBrickColor('#333', 4, 9);
-  setBrickColor('#333', 5, 9);
+  [2.7, 3.7, 4.7, 5.7, 6.7, 7.7, 3.8, 4.9, 5.9, 6.11, 7.11, 6.11, 5.11, 4.11, 3.11, 2.11]
+  .forEach(drawLetter);
   setBrickColor('#333', 6, 10);
-  setBrickColor('#333', 7, 11);
-  setBrickColor('#333', 6, 11);
-  setBrickColor('#333', 5, 11);
-  setBrickColor('#333', 4, 11);
-  setBrickColor('#333', 3, 11);
-  setBrickColor('#333', 2, 11);
+
   // A
-  setBrickColor('#333', 2, 13);
-  setBrickColor('#333', 3, 13);
-  setBrickColor('#333', 4, 13);
-  setBrickColor('#333', 5, 13);
-  setBrickColor('#333', 6, 13);
-  setBrickColor('#333', 7, 13);
-  setBrickColor('#333', 2, 14);
-  setBrickColor('#333', 2, 15);
-  setBrickColor('#333', 2, 16);
-  setBrickColor('#333', 2, 17);
-  setBrickColor('#333', 3, 17);
-  setBrickColor('#333', 4, 17);
-  setBrickColor('#333', 5, 17);
-  setBrickColor('#333', 6, 17);
-  setBrickColor('#333', 7, 17);
-  setBrickColor('#333', 5, 16);
-  setBrickColor('#333', 5, 15);
-  setBrickColor('#333', 5, 14);
+  [2.13, 3.13, 4.13, 5.13, 6.13, 7.13, 2.14, 2.15, 2.16, 2.17, 3.17, 4.17, 5.17, 6.17, 7.17, 5.16, 5.15, 5.14]
+  .forEach(drawLetter);
+
   // K
-  setBrickColor('#333', 2, 19);
-  setBrickColor('#333', 3, 19);
-  setBrickColor('#333', 4, 19);
-  setBrickColor('#333', 5, 19);
-  setBrickColor('#333', 6, 19);
-  setBrickColor('#333', 7, 19);
+  [2.19, 3.19, 4.19, 5.19, 6.19, 7.19, 6.21, 7.22, 3.21, 2.22]
+  .forEach(drawLetter);
   setBrickColor('#333', 5, 20);
-  setBrickColor('#333', 6, 21);
-  setBrickColor('#333', 7, 22);
   setBrickColor('#333', 4, 20);
-  setBrickColor('#333', 3, 21);
-  setBrickColor('#333', 2, 22);
+
   // E
-  setBrickColor('#333', 2, 24);
-  setBrickColor('#333', 3, 24);
-  setBrickColor('#333', 4, 24);
-  setBrickColor('#333', 5, 24);
-  setBrickColor('#333', 6, 24);
-  setBrickColor('#333', 7, 24);
-  setBrickColor('#333', 2, 25);
-  setBrickColor('#333', 2, 26);
-  setBrickColor('#333', 2, 27);
-  setBrickColor('#333', 2, 28);
-  setBrickColor('#333', 7, 25);
-  setBrickColor('#333', 7, 26);
-  setBrickColor('#333', 7, 27);
-  setBrickColor('#333', 7, 28);
-  setBrickColor('#333', 4, 25);
+  [2.24, 3.24, 4.24, 5.24, 6.24, 7.24, 2.25, 2.26, 2.27, 2.28, 7.25, 7.26, 7.27, 7.28, 4.25]
+  .forEach(drawLetter);
+
 }
 
 startScreen();
