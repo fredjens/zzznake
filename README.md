@@ -2,10 +2,10 @@
 
 A snake implementation with vanilla JavaScript
 
-[PLAY](http://zzznake.surge.sh/)
+[PLAY!](http://zzznake.surge.sh/)
 
 Todo
-[ ] Make it functional
+* [ ] Make it functional
 
 ## Develop
 
