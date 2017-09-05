@@ -1,11 +1,12 @@
-import _ from 'lodash';
+import { random, find } from 'lodash';
 import config from './config';
-
-import { createDivElement } from './utils/create-div-element';
+import { createDivElement, setDivColor, drawLetter } from './utils/div';
+import { S, N, A, K, E } from './utils/letters';
 
 const { dimensions, unit, snake, food } = config;
 
 let GAME_STARTED = false;
+let GAME_RUNNING;
 
 /**
  * Draw the board
@@ -36,15 +37,11 @@ for (let i = 0; i < dimensions.height; i++) {
  * Draw the snake
  */
 
-const setBrickColor = (color, x, y) => {
-  ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
-};
-
 const showSnake = () => {
   for(var i = 0; i < snake.body; i++) {
     const logEvent = snake.log[snake.log.length - (1 + i)];
 
-    setBrickColor(
+    setDivCOlor(
       'yellow',
       (logEvent || {}).x,
       (logEvent || {}).y,
@@ -56,7 +53,7 @@ const hideSnake = () => {
   for(var i = 0; i < snake.body; i++) {
     const logEvent = snake.log[snake.log.length - (1 + snake.body + i)];
 
-    setBrickColor(
+    setDivCOlor(
       '#000',
       (logEvent || {}).x,
       (logEvent || {}).y,
@@ -148,19 +145,16 @@ document.onkeydown = function(e) {
  */
 
 const makeFood = () => {
-  const x = _.random(1, config.dimensions.width);
-  const y = _.random(1, config.dimensions.height);
+  const x = random(1, config.dimensions.width);
+  const y = random(1, config.dimensions.height);
 
-  if (_.find(snakeBody, { x, y })) {
+  if (find(snakeBody, { x, y })) {
     console.log('food placed under the snake...');
-
-    /**
-    * Food was placed under the snake
-    */
-    return makeFood();
     /**
      * So we made food again... yolo
      */
+
+    return makeFood();
   }
 
   food.x = x;
@@ -169,18 +163,26 @@ const makeFood = () => {
   const snakeLength = snake.log.length - 1;
   const snakeBody = snake.log.slice((snakeLength - snake.body), snakeLength);
 
-  setBrickColor('red', x, y);
+  setDivCOlor('red', x, y);
 };
 
 /**
  * Check if snake is eating
  */
 
-const checkIfSnakeIsEating = () => {
+const checkIfSnakeIsEating = (snake, food) => {
   if (snake.x === food.x && snake.y === food.y) {
-    makeFood();
+
+    /**
+     * Make snake larger and go faster
+     */
     snake.body = snake.body + 1;
-    snake.speed = snake.speed + 23;
+    snake.speed = snake.speed + 100;
+
+    /**
+     * Put out new food
+     */
+    makeFood();
   }
 };
 
@@ -188,14 +190,11 @@ const checkIfSnakeIsEating = () => {
  * Check collision
  */
 
-let GAME_RUNNING;
-
-const checkCollision = () => {
+const checkCollision = ({ x, y }) => {
   const snakeLength = snake.log.length - 2;
   const snakeBody = snake.log.slice((snakeLength - snake.body), snakeLength);
-  const snakeHead = { x: snake.x, y: snake.y };
 
-  if (_.find(snakeBody, snakeHead)) {
+  if (find(snakeBody, { x, y })) {
     GAME_STARTED = false;
     clearInterval(GAME_RUNNING);
     startScreen();
@@ -203,8 +202,21 @@ const checkCollision = () => {
 }
 
 /**
+ * Start screen
+ */
+
+const startScreen = () => {
+  S.forEach(drawLetter);
+  N.forEach(drawLetter);
+  A.forEach(drawLetter);
+  K.forEach(drawLetter);
+  E.forEach(drawLetter);
+}
+
+/**
  * Run game
  */
+
 
 const startGame = () => {
   GAME_STARTED = true;
@@ -213,41 +225,11 @@ const startGame = () => {
 
   GAME_RUNNING = setInterval(() => {
     console.log('running');
-    checkCollision();
+    checkCollision(snake);
     moveSnake(snake.direction);
-    checkIfSnakeIsEating();
+    checkIfSnakeIsEating(snake, food);
   }, snake.speed);
 };
-
-const drawLetter = (letter) => {
-  setBrickColor('#333', letter.toString().split('.')[0], letter.toString().split('.')[1]);
-};
-
-const startScreen = () => {
-  // S
-  [2.2, 2.3, 2.4, 2.5, 3.2, 4.3, 5.4, 6.5, 7.5, 7.4, 7.3, 7.2]
-  .forEach(drawLetter);
-
-  // N
-  [2.7, 3.7, 4.7, 5.7, 6.7, 7.7, 3.8, 4.9, 5.9, 6.11, 7.11, 6.11, 5.11, 4.11, 3.11, 2.11]
-  .forEach(drawLetter);
-  setBrickColor('#333', 6, 10);
-
-  // A
-  [2.13, 3.13, 4.13, 5.13, 6.13, 7.13, 2.14, 2.15, 2.16, 2.17, 3.17, 4.17, 5.17, 6.17, 7.17, 5.16, 5.15, 5.14]
-  .forEach(drawLetter);
-
-  // K
-  [2.19, 3.19, 4.19, 5.19, 6.19, 7.19, 6.21, 7.22, 3.21, 2.22]
-  .forEach(drawLetter);
-  setBrickColor('#333', 5, 20);
-  setBrickColor('#333', 4, 20);
-
-  // E
-  [2.24, 3.24, 4.24, 5.24, 6.24, 7.24, 2.25, 2.26, 2.27, 2.28, 7.25, 7.26, 7.27, 7.28, 4.25]
-  .forEach(drawLetter);
-
-}
 
 startScreen();
 

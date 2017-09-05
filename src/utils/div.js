@@ -13,3 +13,19 @@ export const createDivElement = (name, styles, target) => {
 
   return document.getElementById(target).appendChild(window[name]);
 };
+
+/**
+ * Set the color of a div in the Grid
+ */
+
+export const setDivColor = (color, x, y) => {
+  ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
+};
+
+/**
+* Draw charchter
+*/
+
+export const drawLetter = (char) => {
+  setDivColor('#333', char.toString().split('.')[0], char.toString().split('.')[1]);
+};
