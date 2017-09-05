@@ -6,6 +6,8 @@ A snake implementation with vanilla JavaScript
 
 Todo
 * [ ] Make it functional
+* [ ] Use canvas instead of div's
+* [ ] Add animations
 
 ## Develop
 
