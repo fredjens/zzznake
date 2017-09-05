@@ -5,6 +5,7 @@
 export const createDivElement = (name, styles, target) => {
   window[name] = document.createElement('div');
   window[name].id = name;
+
   Object.assign(window[name].style, styles);
 
   if (!target) {
@@ -20,6 +21,16 @@ export const createDivElement = (name, styles, target) => {
 
 export const setDivColor = (color, x, y) => {
   ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
+};
+
+/**
+ * Set the color of a div in the Grid
+ */
+
+export const setDivsColor = (divs, color) => {
+  divs.forEach(({ x, y }) => {
+    ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
+  });
 };
 
 /**

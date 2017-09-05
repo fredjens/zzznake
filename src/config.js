@@ -6,12 +6,10 @@ export default {
     height: 30,
   },
   snake: {
-    direction: 'left',
     x: 25,
     y: 25,
     body: 2,
-    speed: 100,
-    log: [],
+    speed: 500,
   },
   food: {
     x: null,
