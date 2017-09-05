@@ -16,6 +16,7 @@ createDivElement('board', {
   height: `${unit * dimensions.height}px`,
   width: `${unit * dimensions.width}px`,
   position: 'relative',
+  fontSize: '0',
 });
 
 /**
@@ -41,7 +42,7 @@ const showSnake = () => {
   for(var i = 0; i < snake.body; i++) {
     const logEvent = snake.log[snake.log.length - (1 + i)];
 
-    setDivCOlor(
+    setDivColor(
       'yellow',
       (logEvent || {}).x,
       (logEvent || {}).y,
@@ -53,7 +54,7 @@ const hideSnake = () => {
   for(var i = 0; i < snake.body; i++) {
     const logEvent = snake.log[snake.log.length - (1 + snake.body + i)];
 
-    setDivCOlor(
+    setDivColor(
       '#000',
       (logEvent || {}).x,
       (logEvent || {}).y,
@@ -148,6 +149,9 @@ const makeFood = () => {
   const x = random(1, config.dimensions.width);
   const y = random(1, config.dimensions.height);
 
+  const snakeLength = snake.log.length - 1;
+  const snakeBody = snake.log.slice((snakeLength - snake.body), snakeLength);
+
   if (find(snakeBody, { x, y })) {
     console.log('food placed under the snake...');
     /**
@@ -160,10 +164,7 @@ const makeFood = () => {
   food.x = x;
   food.y = y;
 
-  const snakeLength = snake.log.length - 1;
-  const snakeBody = snake.log.slice((snakeLength - snake.body), snakeLength);
-
-  setDivCOlor('red', x, y);
+  setDivColor('red', x, y);
 };
 
 /**
