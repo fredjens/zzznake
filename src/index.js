@@ -116,7 +116,7 @@ const moveSnake = (direction) => {
  * Set key events
  */
 
-setSnakeDirection = (direction) => snake.direction = direction;
+const setSnakeDirection = (direction) => snake.direction = direction;
 
 document.onkeydown = function(e) {
   switch (e.keyCode) {
