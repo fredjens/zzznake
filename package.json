@@ -9,11 +9,12 @@
     "lodash": "^4.17.4"
   },
   "scripts": {
-    "start": "neutrino start --use neutrino-preset-web",
-    "build": "neutrino build --use neutrino-preset-web"
+    "start": "vite",
+    "build": "vite build --outDir build"
   },
   "devDependencies": {
     "neutrino": "^6.1.5",
-    "neutrino-preset-web": "^6.1.5"
+    "neutrino-preset-web": "^6.1.5",
+    "vite": "^7.1.7"
   }
 }
