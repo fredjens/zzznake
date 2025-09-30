@@ -5,7 +5,7 @@ A snake implementation with vanilla JavaScript
 [PLAY!](http://zzznake.surge.sh/)
 
 Todo
-* [ ] Add restart logic
+* [x] Add restart logic
 * [ ] Make it functional
 * [ ] Use canvas instead of div's
 * [ ] Add animations
