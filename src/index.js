@@ -1,15 +1,15 @@
-import { random, find, takeRight } from 'lodash';
-import config from './config';
-import { createDivElement, setDivColor, setDivsColor, drawLetter } from './utils/div';
-import keys from './utils/keys';
-import { S, N, A, K, E } from './utils/letters';
+import { random, find, takeRight } from "lodash";
+import config from "./config";
+import {
+  createDivElement,
+  setDivColor,
+  setDivsColor,
+  drawLetter,
+} from "./utils/div";
+import keys from "./utils/keys";
+import { S, N, A, K, E } from "./utils/letters";
 
-const {
-  dimensions,
-  unit,
-  snake,
-  food,
-} = config;
+const { dimensions, unit, snake, food } = config;
 
 let GAME_STARTED = false;
 let GAME_RUNNING;
@@ -21,11 +21,11 @@ let SNAKE_SPEED = 100;
  * Draw the board
  */
 
-createDivElement('board', {
+createDivElement("board", {
   height: `${unit * dimensions.height}px`,
   width: `${unit * dimensions.width}px`,
-  position: 'relative',
-  fontSize: '0',
+  position: "relative",
+  fontSize: "0",
 });
 
 /**
@@ -34,12 +34,16 @@ createDivElement('board', {
 
 for (let i = 0; i < dimensions.height; i++) {
   for (let j = 0; j < dimensions.width; j++) {
-    createDivElement(`${i + 1}.${j + 1}`, {
-      width: `${unit}px`,
-      height: `${unit}px`,
-      display: 'inline-block',
-      background: '#000',
-    }, 'board');
+    createDivElement(
+      `${i + 1}.${j + 1}`,
+      {
+        width: `${unit}px`,
+        height: `${unit}px`,
+        display: "inline-block",
+        background: "#000",
+      },
+      "board"
+    );
   }
 }
 
@@ -47,9 +51,10 @@ for (let i = 0; i < dimensions.height; i++) {
  * Draw the snake
  */
 
-const showSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), 'yellow');
+const showSnake = () =>
+  setDivsColor(takeRight(SNAKE_LOG, snake.body), "yellow");
 
-const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), 'black');
+const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "black");
 
 /**
  * Move the snake
@@ -62,19 +67,19 @@ const pushToSnakeLog = (cords) => {
 const moveSnake = (direction) => {
   hideSnake();
 
-  if (direction === 'left') {
+  if (direction === "left") {
     snake.y--;
   }
 
-  if (direction === 'up') {
+  if (direction === "up") {
     snake.x--;
   }
 
-  if (direction === 'right') {
+  if (direction === "right") {
     snake.y++;
   }
 
-  if (direction === 'down') {
+  if (direction === "down") {
     snake.x++;
   }
 
@@ -103,29 +108,29 @@ const moveSnake = (direction) => {
  * Set key events
  */
 
-const setSnakeDirection = direction => SNAKE_DIRECTION = direction;
+const setSnakeDirection = (direction) => (SNAKE_DIRECTION = direction);
 
-const keyFunctions = ({ keyCode }) => {
+const keyFunctions = ({ keyCode }) => {
   switch (keyCode) {
     case keys.ENTER:
       if (GAME_STARTED) return;
       startGame();
     case keys.LEFT:
-      setSnakeDirection('left');
+      setSnakeDirection("left");
       break;
     case keys.UP:
-      setSnakeDirection('up');
+      setSnakeDirection("up");
       break;
     case keys.RIGHT:
-      setSnakeDirection('right');
+      setSnakeDirection("right");
       break;
     case keys.DOWN:
-      setSnakeDirection('down');
+      setSnakeDirection("down");
       break;
   }
 };
 
-document.addEventListener('keydown', keyFunctions);
+document.addEventListener("keydown", keyFunctions);
 
 /**
  * Make food
@@ -136,24 +141,24 @@ const makeFood = () => {
   const y = random(1, config.dimensions.height);
 
   const snakeLength = SNAKE_LOG.length - 1;
-  const snakeBody = SNAKE_LOG.slice((snakeLength - snake.body), snakeLength);
+  const snakeBody = SNAKE_LOG.slice(snakeLength - snake.body, snakeLength);
 
   if (find(snakeBody, { x, y })) {
-    console.log('food placed under the snake...');
+    console.log("food placed under the snake...");
     return makeFood();
   }
 
   food.x = x;
   food.y = y;
 
-  setDivColor('red', x, y);
+  setDivColor("red", x, y);
 };
 
 /**
  * Check if snake is eating
  */
 
-const checkIfSnakeIsEating = (snake, food) => {
+const checkIfSnakeIsEating = (snake, food) => {
   if (snake.x === food.x && snake.y === food.y) {
     snake.body = snake.body + 1;
     SNAKE_SPEED = SNAKE_SPEED - 10;
@@ -165,16 +170,16 @@ const checkIfSnakeIsEating = (snake, food) => {
  * Check collision
  */
 
-const checkCollision = ({ x, y }) => {
+const checkCollision = ({ x, y }) => {
   const snakeLength = SNAKE_LOG.length - 2;
-  const snakeBody = SNAKE_LOG.slice((snakeLength - snake.body), snakeLength);
+  const snakeBody = SNAKE_LOG.slice(snakeLength - snake.body, snakeLength);
 
-  if (find(snakeBody, { x, y })) {
+  if (find(snakeBody, { x, y })) {
     GAME_STARTED = false;
     clearInterval(GAME_RUNNING);
     startScreen();
   }
-}
+};
 
 /**
  * Start screen
@@ -186,12 +191,11 @@ const startScreen = () => {
   A.forEach(drawLetter);
   K.forEach(drawLetter);
   E.forEach(drawLetter);
-}
+};
 
 /**
  * Run game
  */
-
 
 const startGame = () => {
   const runGame = () => {
@@ -207,4 +211,3 @@ const startGame = () => {
 };
 
 startScreen();
-
