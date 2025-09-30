@@ -1,4 +1,3 @@
-
 export default {
   unit: 20,
   dimensions: {
@@ -14,5 +13,5 @@ export default {
   food: {
     x: null,
     y: null,
-  }
+  },
 };
