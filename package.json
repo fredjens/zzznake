@@ -13,8 +13,6 @@
     "build": "vite build --outDir build"
   },
   "devDependencies": {
-    "neutrino": "^6.1.5",
-    "neutrino-preset-web": "^6.1.5",
     "vite": "^7.1.7"
   }
 }
