@@ -40,7 +40,7 @@ for (let i = 0; i < dimensions.height; i++) {
         width: `${unit}px`,
         height: `${unit}px`,
         display: "inline-block",
-        background: "blue",
+        background: "green",
       },
       "board"
     );
