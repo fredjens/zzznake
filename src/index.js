@@ -9,7 +9,7 @@ import {
 import keys from "./utils/keys";
 import { S, N, A, K, E } from "./utils/letters";
 
-const { dimensions, unit, snake, food } = config;
+const { dimensions, unit, snake, food, bgColor } = config;
 
 let GAME_STARTED = false;
 let GAME_RUNNING;
@@ -40,7 +40,7 @@ for (let i = 0; i < dimensions.height; i++) {
         width: `${unit}px`,
         height: `${unit}px`,
         display: "inline-block",
-        background: "green",
+        background: bgColor,
       },
       "board"
     );

@@ -1,5 +1,5 @@
-
 export default {
+  bgColor: "blue",
   unit: 20,
   dimensions: {
     width: 30,
@@ -14,5 +14,5 @@ export default {
   food: {
     x: null,
     y: null,
-  }
+  },
 };
