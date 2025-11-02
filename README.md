@@ -1,4 +1,3 @@
 # 🐍🐍🐍 Zzznake 🐍🐍🐍
 
-A snake implementation with vanilla JavaScript
-
+A snake implementation with vanilla JS
