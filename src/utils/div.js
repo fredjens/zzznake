@@ -19,17 +19,24 @@ export const createDivElement = (name, styles, target) => {
  * Set the color of a div in the Grid
  */
 
-export const setDivColor = (color, x, y) => {
-  ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
+export const setDivColor = (color, x, y, className) => {
+  const el = document.getElementById(`${x}.${y}`);
+  if (!el) return;
+  el.style.background = color;
+  // Clear 3D classes
+  el.classList.remove('cell-snake', 'cell-food', 'cell-letter');
+  if (className) {
+    el.classList.add(className);
+  }
 };
 
 /**
- * Set the color of a div in the Grid
+ * Set the color of multiple divs in the Grid
  */
 
-export const setDivsColor = (divs, color) => {
+export const setDivsColor = (divs, color, className) => {
   divs.forEach(({ x, y }) => {
-    ((document.getElementById(`${x}.${y}`) || {}).style || {}).background = color;
+    setDivColor(color, x, y, className);
   });
 };
 
@@ -38,5 +45,7 @@ export const setDivsColor = (divs, color) => {
 */
 
 export const drawLetter = (char) => {
-  setDivColor('#333', char.toString().split('.')[0], char.toString().split('.')[1]);
+  const x = char.toString().split('.')[0];
+  const y = char.toString().split('.')[1];
+  setDivColor('#6c5ce7', x, y, 'cell-letter');
 };
