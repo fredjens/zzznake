@@ -1,5 +1,5 @@
 export default {
-  bgColor: "grey",
+  bgColor: "#16213e",
   unit: 20,
   dimensions: {
     width: 30,

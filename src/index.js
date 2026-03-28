@@ -5,17 +5,41 @@ import {
   setDivColor,
   setDivsColor,
   drawLetter,
+  clearBoard,
 } from "./utils/div";
 import keys from "./utils/keys";
 import { S, N, A, K, E } from "./utils/letters";
 
 const { dimensions, unit, snake, food, bgColor } = config;
 
+const INITIAL_SPEED = 120;
+const MIN_SPEED = 40;
+
 let GAME_STARTED = false;
 let GAME_RUNNING;
 let SNAKE_DIRECTION;
 let SNAKE_LOG = [];
-let SNAKE_SPEED = 100;
+let SNAKE_SPEED = INITIAL_SPEED;
+let SCORE = 0;
+let HIGH_SCORE = parseInt(localStorage.getItem("zzznake_high_score") || "0", 10);
+
+/**
+ * Score display
+ */
+
+const scoreEl = document.createElement("div");
+scoreEl.id = "score-display";
+scoreEl.style.cssText =
+  "color: #aaa; font-family: monospace; font-size: 16px; padding: 8px 0; display: flex; justify-content: space-between; width: " +
+  unit * dimensions.width +
+  "px; margin: 0 auto;";
+document.getElementById("app").appendChild(scoreEl);
+
+const updateScore = () => {
+  scoreEl.textContent = GAME_STARTED
+    ? `Score: ${SCORE}  |  High Score: ${HIGH_SCORE}`
+    : `High Score: ${HIGH_SCORE}  |  Press ENTER to start`;
+};
 
 /**
  * Draw the board
@@ -26,6 +50,9 @@ createDivElement("board", {
   width: `${unit * dimensions.width}px`,
   position: "relative",
   fontSize: "0",
+  margin: "0 auto",
+  borderRadius: "4px",
+  overflow: "hidden",
 });
 
 /**
@@ -51,10 +78,16 @@ for (let i = 0; i < dimensions.height; i++) {
  * Draw the snake
  */
 
-const showSnake = () =>
-  setDivsColor(takeRight(SNAKE_LOG, snake.body), "yellow");
+const showSnake = () => {
+  const body = takeRight(SNAKE_LOG, snake.body);
+  body.forEach(({ x, y }, i) => {
+    const isHead = i === body.length - 1;
+    setDivColor(isHead ? "#4cff4c" : "#2eb82e", x, y);
+  });
+};
 
-const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "black");
+const hideSnake = () =>
+  setDivsColor(takeRight(SNAKE_LOG, snake.body), bgColor);
 
 /**
  * Move the snake
@@ -105,16 +138,31 @@ const moveSnake = (direction) => {
 };
 
 /**
+ * Opposite directions map — prevent 180-degree turns
+ */
+
+const opposites = {
+  left: "right",
+  right: "left",
+  up: "down",
+  down: "up",
+};
+
+/**
  * Set key events
  */
 
-const setSnakeDirection = (direction) => (SNAKE_DIRECTION = direction);
+const setSnakeDirection = (direction) => {
+  if (SNAKE_DIRECTION && opposites[direction] === SNAKE_DIRECTION) return;
+  SNAKE_DIRECTION = direction;
+};
 
 const keyFunctions = ({ keyCode }) => {
   switch (keyCode) {
     case keys.ENTER:
       if (GAME_STARTED) return;
       startGame();
+      break;
     case keys.LEFT:
       setSnakeDirection("left");
       break;
@@ -144,14 +192,13 @@ const makeFood = () => {
   const snakeBody = SNAKE_LOG.slice(snakeLength - snake.body, snakeLength);
 
   if (find(snakeBody, { x, y })) {
-    console.log("food placed under the snake...");
     return makeFood();
   }
 
   food.x = x;
   food.y = y;
 
-  setDivColor("red", x, y);
+  setDivColor("#ff4444", x, y);
 };
 
 /**
@@ -161,7 +208,9 @@ const makeFood = () => {
 const checkIfSnakeIsEating = (snake, food) => {
   if (snake.x === food.x && snake.y === food.y) {
     snake.body = snake.body + 1;
-    SNAKE_SPEED = SNAKE_SPEED - 10;
+    SCORE += 10;
+    SNAKE_SPEED = Math.max(MIN_SPEED, SNAKE_SPEED - 5);
+    updateScore();
     makeFood();
   }
 };
@@ -175,10 +224,41 @@ const checkCollision = ({ x, y }) => {
   const snakeBody = SNAKE_LOG.slice(snakeLength - snake.body, snakeLength);
 
   if (find(snakeBody, { x, y })) {
-    GAME_STARTED = false;
-    clearInterval(GAME_RUNNING);
-    startScreen();
+    gameOver();
   }
+};
+
+/**
+ * Game over
+ */
+
+const gameOver = () => {
+  GAME_STARTED = false;
+  clearTimeout(GAME_RUNNING);
+
+  if (SCORE > HIGH_SCORE) {
+    HIGH_SCORE = SCORE;
+    localStorage.setItem("zzznake_high_score", String(HIGH_SCORE));
+  }
+
+  startScreen();
+};
+
+/**
+ * Reset game state
+ */
+
+const resetGame = () => {
+  SNAKE_LOG = [];
+  SNAKE_SPEED = INITIAL_SPEED;
+  SNAKE_DIRECTION = "right";
+  SCORE = 0;
+  snake.x = config.snake.x;
+  snake.y = config.snake.y;
+  snake.body = config.snake.body;
+  food.x = null;
+  food.y = null;
+  clearBoard(dimensions, bgColor);
 };
 
 /**
@@ -191,6 +271,7 @@ const startScreen = () => {
   A.forEach(drawLetter);
   K.forEach(drawLetter);
   E.forEach(drawLetter);
+  updateScore();
 };
 
 /**
@@ -198,6 +279,9 @@ const startScreen = () => {
  */
 
 const startGame = () => {
+  resetGame();
+  updateScore();
+
   const runGame = () => {
     moveSnake(SNAKE_DIRECTION);
     checkCollision(snake);
