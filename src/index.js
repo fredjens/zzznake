@@ -52,9 +52,9 @@ for (let i = 0; i < dimensions.height; i++) {
  */
 
 const showSnake = () =>
-  setDivsColor(takeRight(SNAKE_LOG, snake.body), "yellow");
+  setDivsColor(takeRight(SNAKE_LOG, snake.body), "#00ff00");
 
-const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "black");
+const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "#1a3a1a");
 
 /**
  * Move the snake
@@ -151,7 +151,7 @@ const makeFood = () => {
   food.x = x;
   food.y = y;
 
-  setDivColor("red", x, y);
+  setDivColor("#90ee90", x, y);
 };
 
 /**

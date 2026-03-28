@@ -38,5 +38,5 @@ export const setDivsColor = (divs, color) => {
 */
 
 export const drawLetter = (char) => {
-  setDivColor('#333', char.toString().split('.')[0], char.toString().split('.')[1]);
+  setDivColor('#2d8a2d', char.toString().split('.')[0], char.toString().split('.')[1]);
 };
