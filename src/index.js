@@ -9,7 +9,7 @@ import {
 import keys from "./utils/keys";
 import { S, N, A, K, E } from "./utils/letters";
 
-const { dimensions, unit, snake, food, bgColor } = config;
+const { dimensions, unit, snake, food, bgColor, snakeColor, snakeHeadColor, foodColor } = config;
 
 let GAME_STARTED = false;
 let GAME_RUNNING;
@@ -26,7 +26,7 @@ createDivElement("board", {
   width: `${unit * dimensions.width}px`,
   position: "relative",
   fontSize: "0",
-});
+}, "app");
 
 /**
  * Draw the grid with a good ol' for loop
@@ -51,10 +51,16 @@ for (let i = 0; i < dimensions.height; i++) {
  * Draw the snake
  */
 
-const showSnake = () =>
-  setDivsColor(takeRight(SNAKE_LOG, snake.body), "yellow");
+const showSnake = () => {
+  const body = takeRight(SNAKE_LOG, snake.body);
+  setDivsColor(body, snakeColor);
+  if (body.length > 0) {
+    const head = body[body.length - 1];
+    setDivColor(snakeHeadColor, head.x, head.y);
+  }
+};
 
-const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "black");
+const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), bgColor);
 
 /**
  * Move the snake
@@ -151,7 +157,7 @@ const makeFood = () => {
   food.x = x;
   food.y = y;
 
-  setDivColor("red", x, y);
+  setDivColor(foodColor, x, y);
 };
 
 /**
@@ -185,7 +191,16 @@ const checkCollision = ({ x, y }) => {
  * Start screen
  */
 
+const clearBoard = () => {
+  for (let i = 1; i <= dimensions.height; i++) {
+    for (let j = 1; j <= dimensions.width; j++) {
+      setDivColor(bgColor, i, j);
+    }
+  }
+};
+
 const startScreen = () => {
+  clearBoard();
   S.forEach(drawLetter);
   N.forEach(drawLetter);
   A.forEach(drawLetter);

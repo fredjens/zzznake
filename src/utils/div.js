@@ -37,6 +37,6 @@ export const setDivsColor = (divs, color) => {
 * Draw charchter
 */
 
-export const drawLetter = (char) => {
-  setDivColor('#333', char.toString().split('.')[0], char.toString().split('.')[1]);
+export const drawLetter = (char, color = '#b8a0d0') => {
+  setDivColor(color, char.toString().split('.')[0], char.toString().split('.')[1]);
 };
