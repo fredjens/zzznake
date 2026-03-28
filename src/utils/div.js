@@ -34,9 +34,22 @@ export const setDivsColor = (divs, color) => {
 };
 
 /**
+ * Clear the board back to background color
+ */
+
+export const clearBoard = (dimensions, bgColor) => {
+  for (let i = 1; i <= dimensions.height; i++) {
+    for (let j = 1; j <= dimensions.width; j++) {
+      const el = document.getElementById(`${i}.${j}`);
+      if (el) el.style.background = bgColor;
+    }
+  }
+};
+
+/**
 * Draw charchter
 */
 
 export const drawLetter = (char) => {
-  setDivColor('#333', char.toString().split('.')[0], char.toString().split('.')[1]);
+  setDivColor('#555', char.toString().split('.')[0], char.toString().split('.')[1]);
 };
