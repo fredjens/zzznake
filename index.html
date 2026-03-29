@@ -32,6 +32,7 @@
           0 60px 80px rgba(0, 0, 0, 0.6),
           0 0 120px rgba(80, 60, 200, 0.15);
         border-radius: 4px;
+        transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
       }
 
       .cell {
@@ -77,5 +78,31 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/index.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const board = document.getElementById('board');
+        const inner = document.getElementById('board-inner');
+        if (!board || !inner) return;
+
+        const baseRotateX = 45;
+        const baseRotateZ = -5;
+        const tiltRange = 12;
+
+        board.addEventListener('mousemove', (e) => {
+          const rect = board.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+          const rotateX = baseRotateX - y * tiltRange;
+          const rotateZ = baseRotateZ + x * tiltRange;
+
+          inner.style.transform = `rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`;
+        });
+
+        board.addEventListener('mouseleave', () => {
+          inner.style.transform = `rotateX(${baseRotateX}deg) rotateZ(${baseRotateZ}deg)`;
+        });
+      });
+    </script>
   </body>
 </html>
