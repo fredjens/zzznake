@@ -16,6 +16,7 @@ let GAME_RUNNING;
 let SNAKE_DIRECTION;
 let SNAKE_LOG = [];
 let SNAKE_SPEED = 100;
+let SCORE = 0;
 
 /**
  * Draw the board with 3D wrapper
@@ -168,10 +169,18 @@ const makeFood = () => {
  * Check if snake is eating
  */
 
+const updateScore = () => {
+  const scoreEl = document.getElementById('score');
+  if (!scoreEl) return;
+  scoreEl.querySelector('.score-value').textContent = SCORE;
+};
+
 const checkIfSnakeIsEating = (snake, food) => {
   if (snake.x === food.x && snake.y === food.y) {
     snake.body = snake.body + 1;
     SNAKE_SPEED = SNAKE_SPEED - 10;
+    SCORE++;
+    updateScore();
     makeFood();
   }
 };
@@ -187,6 +196,8 @@ const checkCollision = ({ x, y }) => {
   if (find(snakeBody, { x, y })) {
     GAME_STARTED = false;
     clearInterval(GAME_RUNNING);
+    const scoreEl = document.getElementById('score');
+    if (scoreEl) scoreEl.style.display = 'none';
     resetBoard();
     startScreen();
   }
@@ -223,11 +234,18 @@ const startScreen = () => {
 const startGame = () => {
   SNAKE_LOG = [];
   SNAKE_SPEED = 100;
+  SCORE = 0;
   snake.x = 25;
   snake.y = 25;
   snake.body = 2;
 
   resetBoard();
+
+  const scoreEl = document.getElementById('score');
+  if (scoreEl) {
+    scoreEl.style.display = 'block';
+    scoreEl.querySelector('.score-value').textContent = '0';
+  }
 
   const runGame = () => {
     moveSnake(SNAKE_DIRECTION);

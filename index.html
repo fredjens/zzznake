@@ -73,10 +73,36 @@
         from { transform: translateZ(14px) scale(0.9); }
         to { transform: translateZ(18px) scale(1.1); }
       }
+
+      #score {
+        position: fixed;
+        top: 24px;
+        right: 32px;
+        font-family: 'Courier New', monospace;
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        text-shadow: 0 0 12px rgba(100, 80, 255, 0.5);
+        z-index: 10;
+        display: none;
+      }
+
+      #score .score-value {
+        font-size: 48px;
+        font-weight: bold;
+        color: #00ff8c;
+        text-shadow:
+          0 0 10px rgba(0, 255, 140, 0.6),
+          0 0 30px rgba(0, 255, 140, 0.3);
+        display: block;
+        margin-top: 4px;
+      }
     </style>
   </head>
   <body>
     <div id="app"></div>
+    <div id="score">Score<span class="score-value">0</span></div>
     <script type="module" src="/src/index.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
