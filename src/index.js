@@ -1,4 +1,4 @@
-import { random, find, takeRight } from "lodash";
+import { random } from "lodash";
 import config from "./config";
 import {
   createDivElement,
@@ -8,14 +8,24 @@ import {
 } from "./utils/div";
 import keys from "./utils/keys";
 import { S, N, A, K, E } from "./utils/letters";
+import {
+  createGameState,
+  moveSnake as moveSnakeCore,
+  setSnakeDirection as setDir,
+  checkCollision,
+  checkIfSnakeIsEating,
+  generateFoodPosition,
+  getSnakeBody,
+} from "./game.js";
 
-const { dimensions, unit, snake, food, bgColor } = config;
+const { dimensions, unit, bgColor } = config;
+
+const state = createGameState(config);
+const { snake, food } = state;
 
 let GAME_STARTED = false;
 let GAME_RUNNING;
 let SNAKE_DIRECTION;
-let SNAKE_LOG = [];
-let SNAKE_SPEED = 100;
 
 /**
  * Draw the board
@@ -51,56 +61,17 @@ for (let i = 0; i < dimensions.height; i++) {
  * Draw the snake
  */
 
-const showSnake = () =>
-  setDivsColor(takeRight(SNAKE_LOG, snake.body), "yellow");
+const showSnake = () => setDivsColor(getSnakeBody(state), "yellow");
 
-const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "black");
+const hideSnake = () => setDivsColor(getSnakeBody(state), "black");
 
 /**
  * Move the snake
  */
 
-const pushToSnakeLog = (cords) => {
-  SNAKE_LOG.push(cords);
-};
-
 const moveSnake = (direction) => {
   hideSnake();
-
-  if (direction === "left") {
-    snake.y--;
-  }
-
-  if (direction === "up") {
-    snake.x--;
-  }
-
-  if (direction === "right") {
-    snake.y++;
-  }
-
-  if (direction === "down") {
-    snake.x++;
-  }
-
-  if (snake.y < 1) {
-    snake.y = dimensions.height;
-  }
-
-  if (snake.x < 1) {
-    snake.x = dimensions.width;
-  }
-
-  if (snake.x > dimensions.width) {
-    snake.x = 1;
-  }
-
-  if (snake.y > dimensions.height) {
-    snake.y = 1;
-  }
-
-  pushToSnakeLog({ x: snake.x, y: snake.y });
-
+  moveSnakeCore(state, direction);
   showSnake();
 };
 
@@ -108,7 +79,10 @@ const moveSnake = (direction) => {
  * Set key events
  */
 
-const setSnakeDirection = (direction) => (SNAKE_DIRECTION = direction);
+const setSnakeDirection = (direction) => {
+  SNAKE_DIRECTION = direction;
+  setDir(state, direction);
+};
 
 const keyFunctions = ({ keyCode }) => {
   switch (keyCode) {
@@ -137,31 +111,18 @@ document.addEventListener("keydown", keyFunctions);
  */
 
 const makeFood = () => {
-  const x = random(1, config.dimensions.width);
-  const y = random(1, config.dimensions.height);
-
-  const snakeLength = SNAKE_LOG.length - 1;
-  const snakeBody = SNAKE_LOG.slice(snakeLength - snake.body, snakeLength);
-
-  if (find(snakeBody, { x, y })) {
-    console.log("food placed under the snake...");
-    return makeFood();
-  }
-
-  food.x = x;
-  food.y = y;
-
-  setDivColor("red", x, y);
+  const pos = generateFoodPosition(state, random);
+  food.x = pos.x;
+  food.y = pos.y;
+  setDivColor("red", pos.x, pos.y);
 };
 
 /**
  * Check if snake is eating
  */
 
-const checkIfSnakeIsEating = (snake, food) => {
-  if (snake.x === food.x && snake.y === food.y) {
-    snake.body = snake.body + 1;
-    SNAKE_SPEED = SNAKE_SPEED - 10;
+const checkIfSnakeIsEatingAndFeed = () => {
+  if (checkIfSnakeIsEating(state)) {
     makeFood();
   }
 };
@@ -170,11 +131,8 @@ const checkIfSnakeIsEating = (snake, food) => {
  * Check collision
  */
 
-const checkCollision = ({ x, y }) => {
-  const snakeLength = SNAKE_LOG.length - 2;
-  const snakeBody = SNAKE_LOG.slice(snakeLength - snake.body, snakeLength);
-
-  if (find(snakeBody, { x, y })) {
+const checkCollisionAndEnd = () => {
+  if (checkCollision(state)) {
     GAME_STARTED = false;
     clearInterval(GAME_RUNNING);
     startScreen();
@@ -200,9 +158,9 @@ const startScreen = () => {
 const startGame = () => {
   const runGame = () => {
     moveSnake(SNAKE_DIRECTION);
-    checkCollision(snake);
-    checkIfSnakeIsEating(snake, food);
-    GAME_RUNNING = setTimeout(runGame, SNAKE_SPEED);
+    checkCollisionAndEnd();
+    checkIfSnakeIsEatingAndFeed();
+    GAME_RUNNING = setTimeout(runGame, state.snakeSpeed);
   };
 
   GAME_STARTED = true;
