@@ -10,9 +10,12 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build --outDir build"
+    "build": "vite build --outDir build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vitest": "^4.1.2"
   }
 }
