@@ -6,13 +6,13 @@
   "author": "Fredrik Jensen",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.23"
   },
   "scripts": {
     "start": "vite",
     "build": "vite build --outDir build"
   },
   "devDependencies": {
-    "vite": "^7.1.7"
+    "vite": "^7.3.1"
   }
 }
