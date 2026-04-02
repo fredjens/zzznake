@@ -33,12 +33,72 @@
           0 0 120px rgba(80, 60, 200, 0.15);
         border-radius: 4px;
         transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+        position: relative;
+        border: 2px solid rgba(100, 80, 220, 0.25);
+      }
+
+      /* Board surface lighting gradient */
+      #board-inner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.06) 0%,
+          transparent 40%,
+          transparent 60%,
+          rgba(0, 0, 0, 0.15) 100%
+        );
+        pointer-events: none;
+        z-index: 1;
+        border-radius: 2px;
+      }
+
+      /* Bottom edge – visible thickness */
+      .board-edge-bottom {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 18px;
+        transform: rotateX(-90deg);
+        transform-origin: bottom center;
+        background: linear-gradient(
+          to bottom,
+          #12122a 0%,
+          #0a0a18 100%
+        );
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border: 1px solid rgba(100, 80, 220, 0.15);
+        border-top: none;
+      }
+
+      /* Right edge – visible thickness */
+      .board-edge-right {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 18px;
+        transform: rotateY(90deg);
+        transform-origin: right center;
+        background: linear-gradient(
+          to right,
+          #0e0e22 0%,
+          #08081a 100%
+        );
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border: 1px solid rgba(100, 80, 220, 0.1);
+        border-left: none;
       }
 
       .cell {
         transform-style: preserve-3d;
         transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
         border: 1px solid rgba(255, 255, 255, 0.03);
+        box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.02), inset -1px -1px 0 rgba(0, 0, 0, 0.15);
       }
 
       .cell-snake {

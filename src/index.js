@@ -38,6 +38,15 @@ createDivElement("board-inner", {
   borderRadius: "4px",
 }, "board");
 
+// Board thickness edges
+const edgeBottom = document.createElement("div");
+edgeBottom.className = "board-edge-bottom";
+document.getElementById("board-inner").appendChild(edgeBottom);
+
+const edgeRight = document.createElement("div");
+edgeRight.className = "board-edge-right";
+document.getElementById("board-inner").appendChild(edgeRight);
+
 /**
  * Draw the grid
  */
