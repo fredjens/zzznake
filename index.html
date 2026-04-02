@@ -1,6 +1,134 @@
 <html>
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #0a0a1a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      #app {
+        display: none;
+      }
+
+      #board {
+        perspective: 800px;
+        transform-style: preserve-3d;
+      }
+
+      #board-inner {
+        transform: rotateX(45deg) rotateZ(-5deg);
+        transform-style: preserve-3d;
+        box-shadow:
+          0 60px 80px rgba(0, 0, 0, 0.6),
+          0 0 120px rgba(80, 60, 200, 0.15);
+        border-radius: 4px;
+        transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+      }
+
+      .cell {
+        transform-style: preserve-3d;
+        transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      .cell-snake {
+        transform: translateZ(12px);
+        box-shadow:
+          0 0 6px rgba(0, 255, 140, 0.6),
+          0 4px 8px rgba(0, 0, 0, 0.4);
+        border-radius: 3px;
+        border-color: rgba(0, 255, 140, 0.2);
+      }
+
+      .cell-food {
+        transform: translateZ(16px);
+        box-shadow:
+          0 0 12px rgba(255, 50, 80, 0.8),
+          0 0 24px rgba(255, 50, 80, 0.4),
+          0 4px 8px rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+        animation: food-pulse 1s ease-in-out infinite alternate;
+        border-color: rgba(255, 100, 120, 0.3);
+      }
+
+      .cell-letter {
+        transform: translateZ(6px);
+        box-shadow:
+          0 0 4px rgba(160, 140, 255, 0.4),
+          0 3px 6px rgba(0, 0, 0, 0.3);
+        border-radius: 2px;
+      }
+
+      @keyframes food-pulse {
+        from { transform: translateZ(14px) scale(0.9); }
+        to { transform: translateZ(18px) scale(1.1); }
+      }
+
+      #score {
+        position: fixed;
+        top: 24px;
+        right: 32px;
+        font-family: 'Courier New', monospace;
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        text-shadow: 0 0 12px rgba(100, 80, 255, 0.5);
+        z-index: 10;
+        display: none;
+      }
+
+      #score .score-value {
+        font-size: 48px;
+        font-weight: bold;
+        color: #00ff8c;
+        text-shadow:
+          0 0 10px rgba(0, 255, 140, 0.6),
+          0 0 30px rgba(0, 255, 140, 0.3);
+        display: block;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
   <body>
     <div id="app"></div>
+    <div id="score">Score<span class="score-value">0</span></div>
     <script type="module" src="/src/index.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const board = document.getElementById('board');
+        const inner = document.getElementById('board-inner');
+        if (!board || !inner) return;
+
+        const baseRotateX = 45;
+        const baseRotateZ = -5;
+        const tiltRange = 12;
+
+        board.addEventListener('mousemove', (e) => {
+          const rect = board.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+          const rotateX = baseRotateX - y * tiltRange;
+          const rotateZ = baseRotateZ + x * tiltRange;
+
+          inner.style.transform = `rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`;
+        });
+
+        board.addEventListener('mouseleave', () => {
+          inner.style.transform = `rotateX(${baseRotateX}deg) rotateZ(${baseRotateZ}deg)`;
+        });
+      });
+    </script>
   </body>
 </html>

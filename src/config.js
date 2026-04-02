@@ -1,6 +1,10 @@
 export default {
-  bgColor: "grey",
-  unit: 20,
+  bgColor: "#1a1a2e",
+  snakeColor: "#00ff8c",
+  foodColor: "#ff3250",
+  letterColor: "#6c5ce7",
+  deadColor: "#1a1a2e",
+  unit: 18,
   dimensions: {
     width: 30,
     height: 30,

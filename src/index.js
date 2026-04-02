@@ -16,25 +16,35 @@ let GAME_RUNNING;
 let SNAKE_DIRECTION;
 let SNAKE_LOG = [];
 let SNAKE_SPEED = 100;
+let SCORE = 0;
 
 /**
- * Draw the board
+ * Draw the board with 3D wrapper
  */
 
 createDivElement("board", {
+  perspective: "800px",
+  transformStyle: "preserve-3d",
+});
+
+createDivElement("board-inner", {
   height: `${unit * dimensions.height}px`,
   width: `${unit * dimensions.width}px`,
   position: "relative",
   fontSize: "0",
-});
+  transform: "rotateX(45deg) rotateZ(-5deg)",
+  transformStyle: "preserve-3d",
+  boxShadow: "0 60px 80px rgba(0,0,0,0.6), 0 0 120px rgba(80,60,200,0.15)",
+  borderRadius: "4px",
+}, "board");
 
 /**
- * Draw the grid with a good ol' for loop
+ * Draw the grid
  */
 
 for (let i = 0; i < dimensions.height; i++) {
   for (let j = 0; j < dimensions.width; j++) {
-    createDivElement(
+    const el = createDivElement(
       `${i + 1}.${j + 1}`,
       {
         width: `${unit}px`,
@@ -42,8 +52,9 @@ for (let i = 0; i < dimensions.height; i++) {
         display: "inline-block",
         background: bgColor,
       },
-      "board"
+      "board-inner"
     );
+    if (el) el.classList.add("cell");
   }
 }
 
@@ -52,9 +63,9 @@ for (let i = 0; i < dimensions.height; i++) {
  */
 
 const showSnake = () =>
-  setDivsColor(takeRight(SNAKE_LOG, snake.body), "yellow");
+  setDivsColor(takeRight(SNAKE_LOG, snake.body), config.snakeColor, "cell-snake");
 
-const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), "black");
+const hideSnake = () => setDivsColor(takeRight(SNAKE_LOG, snake.body), bgColor);
 
 /**
  * Move the snake
@@ -151,17 +162,25 @@ const makeFood = () => {
   food.x = x;
   food.y = y;
 
-  setDivColor("red", x, y);
+  setDivColor(config.foodColor, x, y, "cell-food");
 };
 
 /**
  * Check if snake is eating
  */
 
+const updateScore = () => {
+  const scoreEl = document.getElementById('score');
+  if (!scoreEl) return;
+  scoreEl.querySelector('.score-value').textContent = SCORE;
+};
+
 const checkIfSnakeIsEating = (snake, food) => {
   if (snake.x === food.x && snake.y === food.y) {
     snake.body = snake.body + 1;
     SNAKE_SPEED = SNAKE_SPEED - 10;
+    SCORE++;
+    updateScore();
     makeFood();
   }
 };
@@ -177,7 +196,22 @@ const checkCollision = ({ x, y }) => {
   if (find(snakeBody, { x, y })) {
     GAME_STARTED = false;
     clearInterval(GAME_RUNNING);
+    const scoreEl = document.getElementById('score');
+    if (scoreEl) scoreEl.style.display = 'none';
+    resetBoard();
     startScreen();
+  }
+};
+
+/**
+ * Reset board to clear all cells
+ */
+
+const resetBoard = () => {
+  for (let i = 0; i < dimensions.height; i++) {
+    for (let j = 0; j < dimensions.width; j++) {
+      setDivColor(bgColor, i + 1, j + 1);
+    }
   }
 };
 
@@ -198,6 +232,21 @@ const startScreen = () => {
  */
 
 const startGame = () => {
+  SNAKE_LOG = [];
+  SNAKE_SPEED = 100;
+  SCORE = 0;
+  snake.x = 25;
+  snake.y = 25;
+  snake.body = 2;
+
+  resetBoard();
+
+  const scoreEl = document.getElementById('score');
+  if (scoreEl) {
+    scoreEl.style.display = 'block';
+    scoreEl.querySelector('.score-value').textContent = '0';
+  }
+
   const runGame = () => {
     moveSnake(SNAKE_DIRECTION);
     checkCollision(snake);
